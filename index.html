@@ -3,166 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Costa Rican Indigenous Masks - Authentic Artisan Collection</title>
+    <title>Macu's Spanish Learning App</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">
-                <h1>Máscaras Indígenas</h1>
-                <p class="tagline">Costa Rican Heritage</p>
+    <div class="container">
+        <header>
+            <h1>Macu's Spanish Learning App</h1>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
             </div>
-            <ul class="nav-menu">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#masks">Masks</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-            <div class="cart-icon" id="cartIcon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-8 2a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/>
-                </svg>
-                <span class="cart-count" id="cartCount">0</span>
-            </div>
-        </div>
-    </nav>
+            <p class="progress-text">Progress: <span id="progressText">0%</span></p>
+        </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">Authentic Costa Rican Indigenous Masks</h1>
-            <p class="hero-subtitle">Handcrafted by skilled artisans, each mask tells a story of rich cultural heritage and traditional craftsmanship</p>
-            <a href="#masks" class="cta-button">Explore Collection</a>
-        </div>
-        <div class="hero-overlay"></div>
-    </section>
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="vocabulary">Vocabulary</button>
+            <button class="tab-btn" data-tab="practice">Practice</button>
+            <div class="tab-dropdown">
+                <button class="tab-btn dropdown-btn">More ▼</button>
+                <div class="dropdown-content">
+                    <button class="tab-btn" data-tab="phrases">Common Phrases</button>
+                    <button class="tab-btn" data-tab="cognates">Cognates (Easy Words)</button>
+                    <button class="tab-btn" data-tab="stories">Stories & Conversations</button>
+                    <button class="tab-btn" data-tab="pasttense">Past Tense</button>
+                    <button class="tab-btn" data-tab="futuretense">Future Tense</button>
+                    <button class="tab-btn" data-tab="speaking">Speaking Practice</button>
+                </div>
+            </div>
+            <button class="tab-btn" data-tab="stats">Statistics</button>
+        </nav>
 
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <div class="about-content">
-                <h2>Preserving Cultural Heritage</h2>
-                <p>Our collection features authentic indigenous masks crafted by Costa Rican artisans. Each piece is a unique work of art, representing centuries of tradition and cultural significance. These masks are not just decorative items—they are symbols of identity, spirituality, and the rich tapestry of Costa Rican indigenous culture.</p>
-                <p>Every mask in our collection is carefully selected to ensure authenticity and quality. By purchasing from us, you're supporting local artisans and helping preserve these important cultural traditions for future generations.</p>
+        <!-- Vocabulary Tab -->
+        <div class="tab-content active" id="vocabulary">
+            <div class="flashcard-container">
+                <div class="flashcard" id="flashcard">
+                    <div class="flashcard-front">
+                        <h2 id="spanishWord">Click "Start" to begin</h2>
+                        <button id="pronounceBtn" class="btn-pronounce" title="Pronounce">🔊</button>
+                        <p class="hint">Click to flip</p>
+                    </div>
+                    <div class="flashcard-back">
+                        <h2 id="englishWord"></h2>
+                        <p id="exampleSentence"></p>
+                        <button id="pronounceExampleBtn" class="btn-pronounce" title="Pronounce example">🔊 Example</button>
+                    </div>
+                </div>
+                <div class="flashcard-controls">
+                    <button id="prevBtn" class="btn btn-secondary">← Previous</button>
+                    <button id="nextBtn" class="btn btn-primary">Next →</button>
+                </div>
+                <div class="flashcard-actions">
+                    <button id="knowBtn" class="btn btn-success">I Know This ✓</button>
+                    <button id="dontKnowBtn" class="btn btn-danger">Need Practice ✗</button>
+                </div>
+                <div class="word-counter">
+                    <span id="wordCounter">0 / 0</span>
+                </div>
             </div>
         </div>
-    </section>
 
-    <!-- Products Section -->
-    <section id="masks" class="products">
-        <div class="container">
-            <h2 class="section-title">Our Collection</h2>
-            <p class="section-subtitle">Each mask is a unique piece of art, priced at $50</p>
-            <div class="products-grid" id="productsGrid">
-                <!-- Products will be dynamically loaded here -->
+        <!-- Practice Tab -->
+        <div class="tab-content" id="practice">
+            <div class="practice-container">
+                <div class="question-card">
+                    <h3 id="questionText">Ready to practice?</h3>
+                    <div id="questionContent"></div>
+                    <div id="answerOptions" class="answer-options"></div>
+                    <div id="practiceFeedback" class="feedback"></div>
+                </div>
+                <div class="practice-controls">
+                    <button id="startPracticeBtn" class="btn btn-primary">Start Practice</button>
+                    <button id="nextQuestionBtn" class="btn btn-primary" style="display: none;">Next Question</button>
+                </div>
+                <div class="practice-stats">
+                    <p>Score: <span id="practiceScore">0</span> / <span id="totalQuestions">0</span></p>
+                </div>
             </div>
         </div>
-    </section>
 
-    <!-- Cart Sidebar -->
-    <div class="cart-sidebar" id="cartSidebar">
-        <div class="cart-header">
-            <h2>Your Cart</h2>
-            <button class="close-cart" id="closeCart">&times;</button>
-        </div>
-        <div class="cart-items" id="cartItems">
-            <p class="empty-cart">Your cart is empty</p>
-        </div>
-        <div class="cart-footer">
-            <div class="cart-total">
-                <strong>Total: $<span id="cartTotal">0.00</span></strong>
+        <!-- Common Phrases Tab -->
+        <div class="tab-content" id="phrases">
+            <div class="phrases-container">
+                <div class="phrases-grid" id="phrasesGrid"></div>
             </div>
-            <button class="checkout-button" id="checkoutButton">Checkout</button>
+        </div>
+
+        <!-- Cognates Tab -->
+        <div class="tab-content" id="cognates">
+            <div class="cognates-container">
+                <div class="cognates-intro">
+                    <h2>Spanish-English Cognates</h2>
+                    <p>These words are very similar in Spanish and English, making them easy to learn! Many Spanish words ending in -ción, -sión, -dad, -tad, -ia, -io, -al, -ar, -or are similar to English.</p>
+                </div>
+                <div class="cognates-grid" id="cognatesGrid"></div>
+            </div>
+        </div>
+
+        <!-- Stories & Conversations Tab -->
+        <div class="tab-content" id="stories">
+            <div class="stories-container">
+                <div class="stories-selector">
+                    <button class="story-type-btn active" data-type="stories">Short Stories</button>
+                    <button class="story-type-btn" data-type="conversations">Conversations</button>
+                </div>
+                <div class="stories-list" id="storiesList"></div>
+                <div class="story-viewer" id="storyViewer" style="display: none;">
+                    <button class="btn btn-secondary" id="backToListBtn">← Back to List</button>
+                    <div class="story-content">
+                        <h2 id="storyTitle"></h2>
+                        <div class="story-controls">
+                            <button class="btn btn-primary" id="playStoryBtn">🔊 Play Story</button>
+                            <button class="btn btn-secondary" id="pauseStoryBtn" style="display: none;">⏸ Pause</button>
+                            <button class="btn btn-secondary" id="stopStoryBtn" style="display: none;">⏹ Stop</button>
+                        </div>
+                        <div class="story-text" id="storyText"></div>
+                        <div class="story-translation" id="storyTranslation"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Past Tense Tab -->
+        <div class="tab-content" id="pasttense">
+            <div class="pasttense-container">
+                <div class="tense-selector">
+                    <button class="tense-type-btn active" data-type="preterite">Pretérito (Simple Past)</button>
+                    <button class="tense-type-btn" data-type="imperfect">Imperfecto (Past Continuous)</button>
+                </div>
+                <div class="tense-explanation" id="tenseExplanation"></div>
+                <div class="verb-conjugations" id="verbConjugations"></div>
+                <div class="tense-examples" id="tenseExamples"></div>
+                <div class="tense-practice" id="tensePractice">
+                    <h3>Practice Exercise</h3>
+                    <div class="practice-question" id="tensePracticeQuestion"></div>
+                    <div class="practice-answer" id="tensePracticeAnswer"></div>
+                    <button class="btn btn-primary" id="nextTensePracticeBtn">Next Question</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Future Tense Tab -->
+        <div class="tab-content" id="futuretense">
+            <div class="pasttense-container">
+                <div class="tense-selector">
+                    <button class="tense-type-btn-future active" data-type="simple">Simple Future</button>
+                    <button class="tense-type-btn-future" data-type="ir">Ir + a + Infinitive</button>
+                </div>
+                <div class="tense-explanation" id="futureTenseExplanation"></div>
+                <div class="verb-conjugations" id="futureVerbConjugations"></div>
+                <div class="tense-examples" id="futureTenseExamples"></div>
+                <div class="tense-practice" id="futureTensePractice">
+                    <h3>Practice Exercise</h3>
+                    <div class="practice-question" id="futureTensePracticeQuestion"></div>
+                    <div class="practice-answer" id="futureTensePracticeAnswer"></div>
+                    <button class="btn btn-primary" id="nextFutureTensePracticeBtn">Next Question</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Speaking Practice Tab -->
+        <div class="tab-content" id="speaking">
+            <div class="speaking-container">
+                <div class="speaking-intro">
+                    <h2>🎤 Speaking Practice</h2>
+                    <p>Practice speaking Spanish with your voice! Click the microphone button and speak your answer to the prompts.</p>
+                    <p class="browser-warning" id="browserWarning" style="display: none;">
+                        ⚠️ Voice recognition may not be available in all browsers. Try Chrome, Edge, or Safari for best results.
+                    </p>
+                </div>
+                
+                <div class="speaking-practice-card">
+                    <div class="conversation-scenario" id="conversationScenario">
+                        <h3>Select a Practice Scenario</h3>
+                        <div class="scenario-buttons" id="scenarioButtons"></div>
+                    </div>
+                    
+                    <div class="conversation-practice" id="conversationPractice" style="display: none;">
+                        <div class="conversation-prompt">
+                            <h3 id="currentPrompt"></h3>
+                            <p class="prompt-hint" id="promptHint"></p>
+                            <button class="btn btn-primary" id="hearPromptBtn">🔊 Hear Prompt</button>
+                        </div>
+                        
+                        <div class="voice-recording">
+                            <button class="btn btn-record" id="recordBtn">
+                                <span class="mic-icon">🎤</span>
+                                <span class="btn-text">Click to Speak</span>
+                            </button>
+                            <div class="recording-status" id="recordingStatus"></div>
+                        </div>
+                        
+                        <div class="your-response" id="yourResponse">
+                            <h4>Your Response:</h4>
+                            <div class="response-text" id="responseText">-</div>
+                        </div>
+                        
+                        <div class="conversation-controls">
+                            <button class="btn btn-secondary" id="nextPromptBtn" style="display: none;">Next Prompt</button>
+                            <button class="btn btn-secondary" id="newScenarioBtn">New Scenario</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Tab -->
+        <div class="tab-content" id="stats">
+            <div class="stats-container">
+                <div class="stat-card">
+                    <h3>Words Learned</h3>
+                    <p class="stat-number" id="wordsLearned">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Practice Score</h3>
+                    <p class="stat-number" id="practiceScoreStat">0%</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Words to Review</h3>
+                    <p class="stat-number" id="wordsToReview">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Practice</h3>
+                    <p class="stat-number" id="totalPractice">0</p>
+                </div>
+                <button id="resetStatsBtn" class="btn btn-danger">Reset Progress</button>
+            </div>
         </div>
     </div>
 
-    <!-- Cart Overlay -->
-    <div class="cart-overlay" id="cartOverlay"></div>
-
-    <!-- Image Lightbox Modal -->
-    <div class="image-lightbox" id="imageLightbox">
-        <span class="close-lightbox" id="closeLightbox">&times;</span>
-        <img class="lightbox-image" id="lightboxImage" src="" alt="">
-        <div class="lightbox-info">
-            <h3 id="lightboxTitle"></h3>
-            <p class="lightbox-price" id="lightboxPrice"></p>
-        </div>
-    </div>
-
-    <!-- Checkout Modal -->
-    <div class="checkout-modal" id="checkoutModal">
-        <div class="modal-content">
-            <span class="close-modal" id="closeModal">&times;</span>
-            <h2>Checkout</h2>
-            <form id="checkoutForm">
-                <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone</label>
-                    <input type="tel" id="phone" required>
-                </div>
-                <div class="form-group">
-                    <label for="address">Shipping Address</label>
-                    <textarea id="address" rows="3" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="city">City</label>
-                    <input type="text" id="city" required>
-                </div>
-                <div class="form-group">
-                    <label for="zip">ZIP Code</label>
-                    <input type="text" id="zip" required>
-                </div>
-                <div class="form-group">
-                    <label for="country">Country</label>
-                    <input type="text" id="country" required>
-                </div>
-                <button type="submit" class="submit-order">Place Order</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Máscaras Indígenas</h3>
-                    <p>Preserving Costa Rican cultural heritage through authentic artisan masks.</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#masks">Masks</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Contact</h4>
-                    <p>Email: info@mascarasindigenas.com</p>
-                    <p>Phone: +506 1234-5678</p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 Máscaras Indígenas. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="products.js"></script>
-    <script src="script.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
