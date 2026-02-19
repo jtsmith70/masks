@@ -1,6 +1,9 @@
 // Shopping Cart
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
+// Language: persist choice, default to English
+let currentLang = localStorage.getItem('lang') || 'en';
+
 // DOM Elements
 const productsGrid = document.getElementById('productsGrid');
 const cartIcon = document.getElementById('cartIcon');
@@ -19,11 +22,41 @@ const lightboxImage = document.getElementById('lightboxImage');
 const lightboxTitle = document.getElementById('lightboxTitle');
 const lightboxPrice = document.getElementById('lightboxPrice');
 const closeLightbox = document.getElementById('closeLightbox');
+const contactForm = document.getElementById('contactForm');
+
+// Apply current language to all data-i18n elements and update product/cart strings
+function applyLanguage() {
+    document.documentElement.lang = currentLang;
+    document.title = t('pageTitle');
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (key && t(key)) el.textContent = t(key);
+    });
+    // Update active state on lang links
+    document.querySelectorAll('.lang-link').forEach(link => {
+        link.classList.toggle('active', link.getAttribute('data-lang') === currentLang);
+    });
+    loadProducts();
+    updateCartUI();
+    document.getElementById('checkoutButton').textContent = t('cart.checkout');
+}
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    loadProducts();
-    updateCartUI();
+    applyLanguage();
+    
+    // Language switcher
+    document.querySelectorAll('.lang-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const lang = link.getAttribute('data-lang');
+            if (lang && lang !== currentLang) {
+                currentLang = lang;
+                localStorage.setItem('lang', currentLang);
+                applyLanguage();
+            }
+        });
+    });
     
     // Event Listeners
     cartIcon.addEventListener('click', openCart);
@@ -32,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     checkoutButton.addEventListener('click', openCheckout);
     closeModal.addEventListener('click', closeCheckoutModal);
     checkoutForm.addEventListener('submit', handleCheckout);
+    contactForm.addEventListener('submit', handleContactForm);
     
     // Close modal when clicking outside
     checkoutModal.addEventListener('click', (e) => {
@@ -59,16 +93,17 @@ document.addEventListener('DOMContentLoaded', () => {
 // Load Products
 function loadProducts() {
     productsGrid.innerHTML = '';
+    const maskName = t('product.name');
     
     products.forEach(product => {
         const productCard = document.createElement('div');
         productCard.className = 'product-card';
         productCard.innerHTML = `
-            <img src="${product.image}" alt="${product.name}" class="product-image" onclick="openImageLightbox(${product.id})" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27280%27 height=%27300%27%3E%3Crect fill=%27%23f4e4c1%27 width=%27280%27 height=%27300%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27 fill=%27%238b4513%27 font-family=%27Arial%27%3EImage Loading...%3C/text%3E%3C/svg%3E'">
+            <img src="${product.image}" alt="${maskName} #${product.id}" class="product-image" onclick="openImageLightbox(${product.id})" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27280%27 height=%27300%27%3E%3Crect fill=%27%23f4e4c1%27 width=%27280%27 height=%27300%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27 fill=%27%238b4513%27 font-family=%27Arial%27%3EImage Loading...%3C/text%3E%3C/svg%3E'">
             <div class="product-info">
-                <h3 class="product-title">${product.name}</h3>
+                <h3 class="product-title">${maskName} #${product.id}</h3>
                 <p class="product-price">$${product.price.toFixed(2)}</p>
-                <button class="add-to-cart-btn" onclick="addToCart(${product.id})">Add to Cart</button>
+                <button class="add-to-cart-btn" onclick="addToCart(${product.id})">${t('btn.addToCart')}</button>
             </div>
         `;
         productsGrid.appendChild(productCard);
@@ -85,8 +120,8 @@ function addToCart(productId) {
         
         // Show feedback
         const button = event.target;
-        const originalText = button.textContent;
-        button.textContent = 'Added!';
+        const originalText = t('btn.addToCart');
+        button.textContent = t('btn.added');
         button.style.background = '#28a745';
         setTimeout(() => {
             button.textContent = originalText;
@@ -108,23 +143,25 @@ function updateCartUI() {
     
     // Update cart items
     if (cart.length === 0) {
-        cartItems.innerHTML = '<p class="empty-cart">Your cart is empty</p>';
+        cartItems.innerHTML = `<p class="empty-cart">${t('cart.empty')}</p>`;
         checkoutButton.disabled = true;
     } else {
         cartItems.innerHTML = '';
+        const maskName = t('product.name');
         cart.forEach((item, index) => {
             const cartItem = document.createElement('div');
             cartItem.className = 'cart-item';
             cartItem.innerHTML = `
-                <img src="${item.image}" alt="${item.name}" class="cart-item-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2780%27 height=%2780%27%3E%3Crect fill=%27%23f4e4c1%27 width=%2780%27 height=%2780%27/%3E%3C/svg%3E'">
+                <img src="${item.image}" alt="${maskName} #${item.id}" class="cart-item-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2780%27 height=%2780%27%3E%3Crect fill=%27%23f4e4c1%27 width=%2780%27 height=%2780%27/%3E%3C/svg%3E'">
                 <div class="cart-item-info">
-                    <div class="cart-item-title">${item.name}</div>
+                    <div class="cart-item-title">${maskName} #${item.id}</div>
                     <div class="cart-item-price">$${item.price.toFixed(2)}</div>
                 </div>
                 <button class="remove-item" onclick="removeFromCart(${index})">&times;</button>
             `;
             cartItems.appendChild(cartItem);
         });
+        checkoutButton.textContent = t('cart.checkout');
         checkoutButton.disabled = false;
     }
     
@@ -176,8 +213,11 @@ function handleCheckout(e) {
     // In a real application, you would send this data to a server
     console.log('Order submitted:', formData);
     
-    // Show success message
-    alert(`Thank you for your order, ${formData.name}!\n\nYour order total is $${formData.total.toFixed(2)}.\n\nWe will contact you at ${formData.email} to confirm your order and arrange shipping.`);
+    // Show success message (translated)
+    const msg = t('alert.orderThanks').replace('{name}', formData.name) + '\n\n' +
+        t('alert.orderTotal').replace('{total}', formData.total.toFixed(2)) + '\n\n' +
+        t('alert.orderContact').replace('{email}', formData.email);
+    alert(msg);
     
     // Clear cart
     cart = [];
@@ -194,8 +234,9 @@ function openImageLightbox(productId) {
     const product = products.find(p => p.id === productId);
     if (product) {
         lightboxImage.src = product.image;
-        lightboxImage.alt = product.name;
-        lightboxTitle.textContent = product.name;
+        const maskName = t('product.name');
+        lightboxImage.alt = `${maskName} #${product.id}`;
+        lightboxTitle.textContent = `${maskName} #${product.id}`;
         lightboxPrice.textContent = `$${product.price.toFixed(2)}`;
         imageLightbox.classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -205,6 +246,27 @@ function openImageLightbox(productId) {
 function closeImageLightbox() {
     imageLightbox.classList.remove('active');
     document.body.style.overflow = '';
+}
+
+// Contact Form Handler
+function handleContactForm(e) {
+    e.preventDefault();
+    
+    const formData = {
+        name: document.getElementById('contactName').value,
+        email: document.getElementById('contactEmail').value,
+        message: document.getElementById('contactMessage').value
+    };
+    
+    // In a real application, you would send this data to a server
+    console.log('Contact form submitted:', formData);
+    
+    // Show success message (translated)
+    const msg = t('alert.contactThanks').replace('{name}', formData.name) + '\n\n' + t('alert.contactReply').replace('{email}', formData.email);
+    alert(msg);
+    
+    // Reset form
+    contactForm.reset();
 }
 
 // Smooth scrolling for anchor links
